@@ -1,0 +1,111 @@
+
+body {
+    background-color: #ecca96;font-family:Courier New, monospace;
+    background-image:url(../images/background.jpg);
+    background-attachment:fixed;
+}
+
+
+
+h3{
+    border-radius: 5px;
+    font-family:Courier New, monospace;
+    border:1px solid black;
+    text-align: center;
+    width: auto;
+    padding: 4px;
+    margin: 40px auto 1px auto;
+    color: #0b1352;
+    background-color: hsl(36, 90%, 48%);
+}
+
+h4{
+    
+    border-radius: 5px;
+    padding: 2px;
+    margin: 1px auto;
+    width: 315px;
+    border:1px solid black;
+    font-family:Courier New, monospace;
+    text-align: center;
+    color: #0b1352;
+    background-color: hsl(54, 90%, 48%);
+} 
+h5{
+    
+    border-radius: 5px;
+    padding: 1px;
+    margin: 1px auto;
+    width: 265px;
+    border:1px solid black;
+    font-family:Courier New, monospace;
+    text-align: center;
+    color: #0b1352;
+    background-color: hsl(108, 90%, 48%);
+}
+
+spam.optI{
+    color: #000000;
+    background-color: #00ff0075;
+    border:1px solid #000000;
+} 
+
+spam.optTNI{
+    color: #000000;
+    background-color: #ff000075;
+    border:1px solid #000000;
+}
+
+.Letes{
+    background-color: #e46b50;
+    padding:5px; 
+    border:1px solid black;
+    box-shadow: 3px 3px 10px 3px black;
+    text-align: center;
+    margin: 5px auto;
+    width: 252px;
+    border-radius: 5px;
+} 
+
+.tdp{
+    color: #000000;
+    padding:0px; 
+    margin:0;
+}
+
+p.info{
+    display: none;
+}
+
+textarea{
+    width:80%;
+    margin:5px 10%;
+}
+
+input#vld{
+    width:40%;
+    margin:5px 30%;
+}
+p {
+    margin: 0 0 1em 0;
+  }
+
+nav.aBouton{
+    display: none;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    font-family:Courier New, monospace;
+    color: #0b1352;
+}
+
+input#ajt{
+    width:82px;
+    margin: 1%;
+    text-align: center;
+}
+
+input#pEcran{
+    width:82px;
+    margin: 1%;
+    text-align: center;
+}
