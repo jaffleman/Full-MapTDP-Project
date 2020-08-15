@@ -2,8 +2,6 @@ let express = require('express')
 let app = express()
 let bodyParser = require('body-parser')
 let texteFunction = require('./founction_script/gestionTexte')
-//const jsonfile = require('jsonfile')
-//let fs = require('fs'); 
 
 
 //Middleware
@@ -42,4 +40,6 @@ app.get('/datas', (request, response)=>{
     response.json(responseObj)
 })
    
-app.listen(8081) 
+app.listen(8081, () => {
+    console.log("Serveur demarrer et en ecoute sur le port 8081")
+  }) 
