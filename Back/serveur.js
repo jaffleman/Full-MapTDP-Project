@@ -38,7 +38,7 @@ app.get('/datas', (request, response)=>{
             responseObj.value = texteFunction.traitement(lesTdp)
             console.log(responseObj)
         } 
-        myFileLog.log(h+responseObj.status+" => [DEMANDE: "+demande+"] [REPONSE:"+ responseObj.msg+"]")  //Trace log de la demande    
+        myFileLog.log(h+'----------------------------------------------------'+'\n'+responseObj.status+" => [DEMANDE: "+demande+"] [REPONSE:"+ responseObj.msg+"]")  //Trace log de la demande    
     }
     response.setHeader('Access-Control-Allow-Origin', '*')
     response.json(responseObj)
