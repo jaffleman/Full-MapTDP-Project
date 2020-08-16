@@ -51,8 +51,7 @@ app.get('/datas', (request, response)=>{
             console.log('server.js: lancement du traitement des données...')
             responseObj.status  = 300;
             responseObj.msg = 'OK'  
-            responseObj.value = texteFunction.traitement(lesTdp)
-            console.log(responseObj)
+            responseObj.value = texteFunction.traitement(lesTdp)      
         } 
         myFileLog.log(h+'----------------------------------------------------'+'\n'+responseObj.status+" => [DEMANDE: "+demande+"] [REPONSE:"+ responseObj.msg+"]")  //Trace log de la demande    
     }

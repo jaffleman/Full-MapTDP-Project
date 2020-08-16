@@ -130,12 +130,8 @@ module.exports = {
         }
         if (tabTdp.length === 0) {return null;} else {return tabTdp;}
         
-    } 
-    
-    ,
-  
+    },
     /*************************************** */
-    
     traitement: (tab) => {
         /*traitement() se charge d'ordonner la liste de TDP dans la tab.
         ils sont classés par Rep, par Salle, par Rco.*/
@@ -143,7 +139,6 @@ module.exports = {
         const tabTrie = f.trieTdpXrep(tab,tabRep);
         const tabSalle = f.seachSalleXrep(tabTrie,tabRep);
         return f.shortTdpRepSalle(tabTrie,tabSalle,tabRep);
-        
     }
 }         
 
