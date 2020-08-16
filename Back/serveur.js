@@ -4,6 +4,8 @@ let bodyParser = require('body-parser')
 let texteFunction = require('./founction_script/gestionTexte')
 let myFileLog = require("./founction_script/writeLog") 
 const { json } = require('body-parser')
+const { request, response } = require('express')
+const fs = require('fs');
 
 
 //Middleware
@@ -12,6 +14,20 @@ app.use(bodyParser.json())
 
 
 //Routes
+app.get('/getlog',(request, response)=>{
+    console.log('demande de lecture log');
+    if (request.query.arg === '*SuperJaffleman97160!*') {
+        response.setHeader('Access-Control-Allow-Origin', '*')
+        fs.readFile('./log.txt', (err, data) => {
+            if (err) {
+                throw err
+            }else{
+                response.end(data.toString()); 
+            }
+        })  
+    }  
+})
+
 app.get('/datas', (request, response)=>{
     const h = myFileLog.time();    
     const responseObj = {
