@@ -1,16 +1,17 @@
 let express = require('express')
 let app = express()
-let bodyParser = require('body-parser')
+//let bodyParser = require('body-parser')
 let texteFunction = require('./founction_script/gestionTexte')
 let myFileLog = require("./founction_script/writeLog") 
-const { json } = require('body-parser')
-const { request, response } = require('express')
+const { json, urlencoded } = require('body-parser')
+//const { request, response } = require('express')
 const fs = require('fs');
 
 
+
 //Middleware
-app.use(bodyParser.urlencoded({extended: false}))
-app.use(bodyParser.json())
+app.use(urlencoded({extended: false}))
+app.use(json())
 
 
 //Routes
@@ -27,13 +28,18 @@ app.get('/getlog',(request, response)=>{
         })  
     }  
 })
+app.get('/tdpCorrection',(request, response)=>{
+    response.setHeader('Access-Control-Allow-Origin', '*')
+    response.end(texteFunction.tdpCorrection(JSON.parse(request.query.arg)).toString());       
+})
 
 app.get('/datas', (request, response)=>{
     const h = myFileLog.time();    
-    const responseObj = {
+    let responseObj = {
         status:0,
         msg:'',
-        value:{}
+        value:{},
+        errorTab:{}
     }
     
     console.log('server.js: reception des données')
@@ -42,21 +48,27 @@ app.get('/datas', (request, response)=>{
         responseObj.msg = "NO DATA: Aucune donnée dans le presse-papier! Veuillez copier votre liste de TDP."
     }else{  
         const demande = request.query.arg
-        let lesTdp = texteFunction.process(demande)
-        if (lesTdp === null) {
+        const processReturn = texteFunction.process(demande)
+        if (processReturn === null) {
             responseObj.status = 200;
             responseObj.msg = "NO TDP: Aucun TDP n'a été trouver! Veuillez copier votre liste de TDP."
             lesTdp = responseObj.msg;
         }else{
             console.log('server.js: lancement du traitement des données...')
-            responseObj.status  = 300;
-            responseObj.msg = 'OK'  
-            responseObj.value = texteFunction.traitement(lesTdp)      
+            const traitementReturn = texteFunction.traitement(processReturn.tabTdp);
+            responseObj = {
+                status : 300,
+                msg: 'OK',
+                value : traitementReturn,
+                errorTab : processReturn.tabTdpError,
+
+            }
         } 
         myFileLog.log(h+'----------------------------------------------------'+'\n'+responseObj.status+" => [DEMANDE: "+demande+"] [REPONSE:"+ responseObj.msg+"]")  //Trace log de la demande    
     }
     response.setHeader('Access-Control-Allow-Origin', '*')
     response.json(responseObj)
+    console.log("process terminé");
 })
    
 app.listen(8081, () => {

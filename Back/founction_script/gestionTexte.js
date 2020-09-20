@@ -18,6 +18,7 @@ let f = require('./functions')
  
 module.exports = {
     process : (texla) => {
+
         /* process() extrait une liste d'objet de type TDP créé a l'aide de la classe tdp.
         cette liste est obtenue a partir du texte brute */
         let z = 0;
@@ -25,6 +26,7 @@ module.exports = {
         let y = 0;
         let match = 0;
         let tabTdp = [];
+        let tabTdpError = [];
         const MatchPositionTab = []; //tab des positions correspondantes a un mot clé trouvé
         const tabATexla = texla.split(''); //division du text lettre par lettre, placée dans un tab
         const tabMotCle = [['L', '/', 'I', 'N', 'X'],
@@ -57,6 +59,7 @@ module.exports = {
                 }
             }
         }
+        
         for (let a = 0; a < MatchPositionTab.length; a++) {
             const rep = (f.checheRepLa(texla, MatchPositionTab, a));
             const Tdp = String(texla.substring(MatchPositionTab[a], (MatchPositionTab[a]) + 10));
@@ -65,6 +68,7 @@ module.exports = {
             const magik = f.tabDesPositions()[parseInt(posission)];
             let salle, rco, colone, posissionReglette, opt;
             const tabInfoRep = f.calcPositionReglette(reglette, rep);
+            console.log(tabInfoRep);
             if (rep != 'REP??') {
                 //const tabInfoRep = calcPositionReglette(reglette,rep);
                 if (tabInfoRep !== undefined) {
@@ -106,20 +110,34 @@ module.exports = {
                     }
                 }
                 else {
-                    // tabInfoRep = calcPositionReglette(reglette,rep);
-                    rco = '1';
-                    salle = '1';
-                    colone = 'Position';
-                    posissionReglette = 'Inconnue';
+
+                    //"position introuvable"
+                    rco = '...';
+                    salle = '...';
+                    colone = '...';
+                    posissionReglette = '...';
+                    opt = '...'
+                    if (tabTdpError.length === 0) {
+                        tabTdpError.push(new Tdpla((a + 1), rep, reglette, posission, salle, magik, rco, colone, posissionReglette, opt));
+                    }
+                    else {
+                        tabTdpError = f.tabCompare(tabTdpError, new Tdpla((a + 1), rep, reglette, posission, salle, magik, rco, colone, posissionReglette, opt));
+                    }
                 }
             }
             else {
-                //let tabInfoRep = calcPositionReglette(reglette,rep);
-                rco = 1;
-                salle = 1;
-                colone = 'Position';
-                posissionReglette = 'Inconnue';
-                opt = 'REP INCONNU';
+                //"Répartiteur Introuvable"
+                rco = '...';
+                salle = '...';
+                colone = '...';
+                posissionReglette = '...';
+                opt = '...';
+                if (tabTdpError.length === 0) {
+                    tabTdpError.push(new Tdpla((a + 1), rep, reglette, posission, salle, magik, rco, colone, posissionReglette, opt));
+                }
+                else {
+                    tabTdpError = f.tabCompare(tabTdpError, new Tdpla((a + 1), rep, reglette, posission, salle, magik, rco, colone, posissionReglette, opt));
+                }
             }
             if (tabTdp.length === 0) {
                 tabTdp.push(new Tdpla((a + 1), rep, reglette, posission, salle, magik, rco, colone, posissionReglette, opt));
@@ -128,8 +146,7 @@ module.exports = {
                 tabTdp = f.tabCompare(tabTdp, new Tdpla((a + 1), rep, reglette, posission, salle, magik, rco, colone, posissionReglette, opt));
             }
         }
-        if (tabTdp.length === 0) {return null;} else {return tabTdp;}
-        
+        if (tabTdp.length === 0 && tabTdpError.length === 0) {return null;} else {return {tabTdp, tabTdpError};}
     },
     /*************************************** */
     traitement: (tab) => {
@@ -139,6 +156,37 @@ module.exports = {
         const tabTrie = f.trieTdpXrep(tab,tabRep);
         const tabSalle = f.seachSalleXrep(tabTrie,tabRep);
         return f.shortTdpRepSalle(tabTrie,tabSalle,tabRep);
+    },
+
+    tdpCorrection: (data) => {
+        const jsonfile = require('jsonfile')
+        const {rep, posissionReglette, salle, rco, colone, reglette} = data;
+        const reppath = './founction_script/rep/'+rep+'.json'
+        const checkRep=()=>{
+            try {
+                fs.statSync(reppath);
+                return true;
+            }
+            catch (err) {
+                if (err.code === 'ENOENT') {
+                    return false;
+                } 
+            }
+        }
+
+        if (checkRep) {
+            let repTab = jsonfile.readFileSync(reppath)
+            if(repTab.tab[salle-1][rco-1][colone-1][posissionReglette-1][0] !== reglette){
+                        repTab.tab[salle-1][rco-1][colone-1][posissionReglette-1][0] = reglette
+                        jsonfile.writeFileSync(reppath, repTab)
+                        console.log('Fichier écrassé!')
+                        return "false"                
+            }else{
+                console.log('modif inutile');
+                return "true" 
+            }               
+        }
+        
     }
 }         
 
