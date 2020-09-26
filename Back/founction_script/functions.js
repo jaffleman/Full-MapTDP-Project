@@ -147,7 +147,7 @@ module.exports = {
     },
     
     calcPositionReglette: (reglette,repName) => {
-        
+        if (repName==='rep??'){return null}
         const file = './founction_script/rep/'+repName+'.json'
         let repTab = []
         try {
@@ -178,22 +178,22 @@ module.exports = {
     
     checheRepLa: (texla,MatchPositionTab,a) => {
         const baieLa =  parseInt(texla.substring((MatchPositionTab[a])-3,(MatchPositionTab[a])-1)); 
-        let r;
+        let rep;
         if (baieLa>0){
-            r =  texla.substring((MatchPositionTab[a])-9,(MatchPositionTab[a])-4);
+            rep =  texla.substring((MatchPositionTab[a])-9,(MatchPositionTab[a])-4);
         }else{
-            r =  texla.substring((MatchPositionTab[a])-8,(MatchPositionTab[a])-3);
+            rep =  texla.substring((MatchPositionTab[a])-8,(MatchPositionTab[a])-3);
         }
         
-        const reppath = './founction_script/rep/'+r+'.json'
+        const reppath = './founction_script/rep/'+rep+'.json'
         try {
             fs.statSync(reppath);
-            return r;
+            return ({rep, repHasfouded:true});
         }
         catch (err) {
-          if (err.code === 'ENOENT') {
-            return 'rep??';
-          }
+            if (err.code === 'ENOENT') {
+                return ({rep, repHasFouded:false});
+            }
         }
     }
 }

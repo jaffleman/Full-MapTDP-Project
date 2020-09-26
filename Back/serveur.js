@@ -28,7 +28,9 @@ app.get('/getlog',(request, response)=>{
         })  
     }  
 })
+
 app.get('/tdpCorrection',(request, response)=>{
+    console.log(request.query.arg);
     response.setHeader('Access-Control-Allow-Origin', '*')
     response.end(texteFunction.tdpCorrection(JSON.parse(request.query.arg)).toString());       
 })
@@ -39,7 +41,8 @@ app.get('/datas', (request, response)=>{
         status:0,
         msg:'',
         value:{},
-        errorTab:{}
+        errorTab:[],
+        errorRep:{}
     }
     
     console.log('server.js: reception des données')
@@ -49,7 +52,7 @@ app.get('/datas', (request, response)=>{
     }else{  
         const demande = request.query.arg
         const processReturn = texteFunction.process(demande)
-        if (processReturn === null) {
+        if (processReturn.tabTdp.length === 0 && processReturn.tabTdpError.length===0 && processReturn.tabRepError.length===0) {
             responseObj.status = 200;
             responseObj.msg = "NO TDP: Aucun TDP n'a été trouver! Veuillez copier votre liste de TDP."
             lesTdp = responseObj.msg;
@@ -60,7 +63,8 @@ app.get('/datas', (request, response)=>{
                 status : 300,
                 msg: 'OK',
                 value : traitementReturn,
-                errorTab : processReturn.tabTdpError,
+                errorRep : [...processReturn.tabRepError],
+                errorTab : [...processReturn.tabTdpError],
 
             }
         } 
