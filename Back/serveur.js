@@ -1,10 +1,8 @@
 let express = require('express')
 let app = express()
-//let bodyParser = require('body-parser')
 let texteFunction = require('./founction_script/gestionTexte')
 let myFileLog = require("./founction_script/writeLog") 
 const { json, urlencoded } = require('body-parser')
-//const { request, response } = require('express')
 const fs = require('fs');
 
 
@@ -30,7 +28,6 @@ app.get('/getlog',(request, response)=>{
 })
 
 app.get('/tdpCorrection',(request, response)=>{
-    console.log(request.query.arg);
     response.setHeader('Access-Control-Allow-Origin', '*')
     response.end(texteFunction.tdpCorrection(JSON.parse(request.query.arg)).toString());       
 })

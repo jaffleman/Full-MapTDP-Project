@@ -122,7 +122,8 @@ module.exports = {
 
     tdpCorrection: (data) => {
         const jsonfile = require('jsonfile')
-        const {rep, posissionReglette, salle, rco, colone, reglette} = data;
+        const {newPosition,oldPosition} = data;
+        const {rep, posissionReglette, salle, rco, colone, reglette} = newPosition;
         const reppath = './founction_script/rep/'+rep+'.json'
         const checkRep=()=>{
             try {
@@ -140,7 +141,12 @@ module.exports = {
             let repTab = jsonfile.readFileSync(reppath)
             if(repTab.tab[salle-1][rco-1][colone-1][posissionReglette-1][0] !== reglette){
                         repTab.tab[salle-1][rco-1][colone-1][posissionReglette-1][0] = reglette
+                        if (oldPosition){
+                            const {oldPosissionReglette, oldSalle, oldRco, oldColone} = oldPosition;
+                            repTab.tab[oldSalle-1][oldRco-1][oldColone-1][oldPosissionReglette-1][0] = "x"
+                        }  
                         jsonfile.writeFileSync(reppath, repTab)
+
                         console.log('Fichier écrassé!')
                         return "false"                
             }else{
